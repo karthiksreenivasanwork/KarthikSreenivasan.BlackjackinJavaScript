@@ -1,0 +1,72 @@
+html,
+body {
+    margin: 0;
+    height: 100%;
+    overflow: hidden;
+}
+
+/*
+    Position the master container to be in the middle of the page both vertically and horizontally.
+*/
+.masterContainerDesktop {
+    height: auto;
+    width: 500px;
+    background-color: rgb(145, 199, 128);
+
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    margin: auto;
+}
+
+.masterContainerMobile {
+    height: auto;
+    width: auto;
+    background-color: rgb(145, 199, 128);
+
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    margin: auto;
+}
+
+.childContainer {
+    width: 100%;
+    text-align: center;
+}
+
+.primaryButtonContainer {
+    margin: 20px;
+}
+
+.secondaryButtonContainer {
+    margin: 20px;
+}
+
+.dealerCardContainer {
+    background-color: rgb(221, 246, 136);
+}
+
+.playerCardContainer {
+    background-color: rgb(192, 253, 255);
+}
+
+.resultContainer {
+    background-color: rgb(233, 153, 253);
+}
+
+.cardImageControlDesktop {
+    height: 190px;
+    width: auto;
+}
+
+.cardImageControlMobile {
+    height: 140px;
+    width: auto;
+}
