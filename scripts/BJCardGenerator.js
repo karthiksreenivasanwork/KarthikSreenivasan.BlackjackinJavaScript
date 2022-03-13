@@ -62,7 +62,3 @@ class BJCardGenerator {
         return this._bjViewCardCollection;
     }
 }
-
-new BJCardGenerator().ViewCardCollectionwithPoints().forEach(text =>{
-    console.log(text);
-});

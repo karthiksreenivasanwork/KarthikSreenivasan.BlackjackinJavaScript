@@ -25,34 +25,41 @@
 
 <body>
 
-    <div id="divMasterContainerID" class="masterContainer">
-
-        <div class="childContainer">
-            <div>
+    <div class="flex-container">
+        <div class="flex-container-border">
+            <div class="flex-item">
                 <h1>Welcome to Blackjack</h1>
             </div>
-            <div class="resultContainer">
+
+            <div class="flex-item">
                 <h2>It is Draw !!!</h2>
             </div>
-            <div class="primaryButtonContainer">
-                <button id="btnStartGame" onclick="onbtnStartGameClick()">Start Game</button>
-                <button id="btnStopGame" onclick="onbtnbtnStopGameClick()">Stop Game</button>
+
+            <div class="flex-item">
+                <div class="primaryButtonContainer">
+                    <button id="btnStartGame" onclick="onbtnStartGameClick()">Start Game</button>
+                    <button id="btnRestartGame" onclick="onbtnbtnRestartGameClick()">Restart Game</button>
+                </div>
+
+                <div class="secondaryButtonContainer">
+                    <button id="btnHit" onclick="onbtnHitClick()" style="visibility: hidden;">Hit</button>
+                    <button id="btnStay" onclick="onbtnStayClick()" style="visibility: hidden;">Stay</button>
+                </div>
             </div>
-            <div class="secondaryButtonContainer">
-                <button id="btnHit" onclick="onbtnHitClick()" style="visibility: hidden;">Hit</button>
-                <button id="btnStay" onclick="onbtnStayClick()" style="visibility: hidden;">Stay</button>
-            </div>
-            <div class="dealerCardContainer">
-                <h2>Dealer's hand</h2>
-                <img id="imgDealerCard1" src="assets/playingcardimages/10_of_clubs.png">
-                <img id="imgDealerCard2" src="assets/playingcardimages/9_of_clubs.png">
-                <img id="imgDealerCard3" src="assets/playingcardimages/8_of_clubs.png">
-            </div>
-            <div class="playerCardContainer">
-                <h2>Players's hand</h2>
-                <img id="imgPlayerCard1" src="assets/playingcardimages/7_of_clubs.png">
-                <img id="imgPlayerCard2" src="assets/playingcardimages/6_of_clubs.png">
-                <img id="imgPlayerCard3" src="assets/playingcardimages/5_of_clubs.png">
+
+            <div class="flex-item">
+                <div class="dealerCardContainer">
+                    <h2>Dealer's hand</h2>
+                    <img id="imgDealerCard1" src="assets/playingcardimages/10_of_clubs.png">
+                    <img id="imgDealerCard2" src="assets/playingcardimages/9_of_clubs.png">
+                </div>
+
+                <div class="playerCardContainer">
+                    <h2>Players's hand</h2>
+                    <img id="imgPlayerCard1" src="assets/playingcardimages/7_of_clubs.png">
+                    <img id="imgPlayerCard2" src="assets/playingcardimages/6_of_clubs.png">
+                    <img id="imgPlayerCard3" src="assets/playingcardimages/5_of_clubs.png">
+                </div>
             </div>
         </div>
     </div>

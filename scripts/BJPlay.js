@@ -13,7 +13,7 @@ function onbtnStartGameClick() {
    document.getElementById("btnStay").style.visibility = 'visible';
 }
 
-function onbtnbtnStopGameClick() {
+function onbtnbtnRestartGameClick() {
    document.getElementById("btnHit").style.visibility = 'hidden';
    document.getElementById("btnStay").style.visibility = 'hidden';
 }

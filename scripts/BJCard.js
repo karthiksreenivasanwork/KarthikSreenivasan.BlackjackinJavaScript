@@ -38,6 +38,9 @@ class BJCard {
         return `${this._cardNameWithoutFamily.toLowerCase()}_of_${this._cardFamily.toLowerCase()}`;
     }
 
+    /**
+     * Returns the value of each card.
+     */
     get CardPoints(){
         return this._cardPointCollection;
     }

@@ -4,18 +4,18 @@
  */
 function dynamicCardSize(mediaQueryRef) {
     if (mediaQueryRef.matches) { //Lesser than 500px
-        document.getElementById("divMasterContainerID").className = "masterContainerMobile";
-        for (let i = 1; i <= 3; i++) {
+        //document.getElementById("divMasterContainerID").className = "masterContainerMobile";
+        for (let i = 1; i <= BJNumbers.TotalCardforDealer; i++)
             document.getElementById(`imgDealerCard${i.toString()}`).className = "cardImageControlMobile";
-            document.getElementById(`imgPlayerCard${i.toString()}`).className = "cardImageControlMobile";
-        }
+        for (let j = 1; j <= BJNumbers.TotalCardforPlayer; j++)
+            document.getElementById(`imgPlayerCard${j.toString()}`).className = "cardImageControlMobile";
     }
     else { //Greater than 500px
-        document.getElementById("divMasterContainerID").className = "masterContainerDesktop";
-        for (let i = 1; i <= 3; i++) {
+        //document.getElementById("divMasterContainerID").className = "masterContainerDesktop";
+        for (let i = 1; i <= BJNumbers.TotalCardforDealer; i++)
             document.getElementById(`imgDealerCard${i.toString()}`).className = "cardImageControlDesktop";
-            document.getElementById(`imgPlayerCard${i.toString()}`).className = "cardImageControlDesktop";
-        }
+        for (let j = 1; j <= BJNumbers.TotalCardforPlayer; j++)
+            document.getElementById(`imgPlayerCard${j.toString()}`).className = "cardImageControlDesktop";
     }
 }
 
