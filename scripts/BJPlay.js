@@ -1,27 +1,86 @@
-/*
-1. Copy the card object collection into a new array.
-2. Generate random numbers to fetch unique cards.
-3. Have one card for the dealer and 2 cards for the player.
-4. If the player is hitting, then add one additional card for dealer 
-   as well as player before declaring the winner.
-5. If the player is staying, then add one additonal card for the dealer
-   before calculations to declare the winner.
-*/
+import BJCardGenerator from "./BJCardGenerator.js";
+import BJUtul from "./BJUntl.js";
 
-function onbtnStartGameClick() {
-   document.getElementById("btnHit").style.visibility = 'visible';
-   document.getElementById("btnStay").style.visibility = 'visible';
-}
+/**
+ *
+ */
+export default class BJPlay {
+  _originalCardCollection = [];
+  _playingCardCollection = [];
 
-function onbtnbtnRestartGameClick() {
-   document.getElementById("btnHit").style.visibility = 'hidden';
-   document.getElementById("btnStay").style.visibility = 'hidden';
-}
+  _playersCards = [];
+  _dealersCards = [];
 
-function onbtnHitClick() {
-   console.log("Hit button event fired");
-}
+  /**
+   *
+   * @param {BJCardGenerator} cardGeneratorRef
+   */
+  constructor(cardGeneratorRef) {
+    this._originalCardCollection = cardGeneratorRef.GenerateDeckOfCards();
+    Object.assign(this._playingCardCollection, this._originalCardCollection);
+    this.setPlayerCards(2);
+    this.setDealerCards(1);
+  }
 
-function onbtnStayClick() {
-   console.log("Stay button event fired");
+  /**
+   * Returns a collection of the players cards
+   * @returns {BJCard[]}
+   */
+  get getPlayersCards() {
+    return this._playersCards;
+  }
+
+  /**
+   * Returns a collection of the dealers cards
+   * @returns {BJCard[]}
+   */
+  get getDealersCards() {
+    return this._dealersCards;
+  }
+
+  setPlayerCards(totalCardCount) {
+    for (let i = 0; i < totalCardCount; i++) {
+      let cardIndex = this.getCardIndexFromPlayingCards();
+      this._playersCards.push(this._playingCardCollection[cardIndex]);
+      this._playingCardCollection.splice(cardIndex, 1);
+    }
+  }
+
+  /**
+   * Record and returns the reference of the third card of the player
+   * @returns {BJCard}
+   */
+  addAdditionalCardForPlayer() {
+    let cardIndex = this.getCardIndexFromPlayingCards();
+    this._playersCards.push(this._playingCardCollection[cardIndex]);
+    this._playingCardCollection.splice(cardIndex, 1);
+    return this._playersCards[this._playersCards.length - 1];
+  }
+
+  /**
+   * Record and returns the reference of the second card of the dealer
+   * @returns {BJCard}
+   */
+  addAdditionalCardForDealer() {
+    let cardIndex = this.getCardIndexFromPlayingCards();
+    this._dealersCards.push(this._playingCardCollection[cardIndex]);
+    this._playingCardCollection.splice(cardIndex, 1);
+    return this._dealersCards[this._dealersCards.length - 1];
+  }
+
+  setDealerCards(totalCardCount) {
+    for (let i = 0; i < totalCardCount; i++) {
+      let cardIndex = this.getCardIndexFromPlayingCards();
+      this._dealersCards.push(this._playingCardCollection[cardIndex]);
+      this._playingCardCollection.splice(cardIndex, 1);
+    }
+  }
+
+  getCardIndexFromPlayingCards() {
+    let randomCardIndex = BJUtul.getRandomNumberFromInterval(
+      1,
+      this._playingCardCollection.length
+    );
+    return randomCardIndex - 1;
+  }
 }
