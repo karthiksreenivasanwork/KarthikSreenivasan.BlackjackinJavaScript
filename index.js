@@ -25,18 +25,41 @@ var _dealerCardTwo = {};
 var _playerScore = 0;
 var _dealerScore = 0;
 
+//Button element references
 const _startButtonElement = document.querySelector("[id=btnStartGame]");
 const _restartButtonElement = document.querySelector("[id=btnRestartGame]");
 const _hitButtonElement = document.querySelector("[id=btnHit]");
 const _stayButtonElement = document.querySelector("[id=btnStay]");
 
-function initalize() {
+//Card imageelement references for the player
+const _imgPlayerCardOneElement = document.querySelector("[id=imgPlayerCard1]");
+const _imgPlayerCardTwoElement = document.querySelector("[id=imgPlayerCard2]");
+const _imgPlayerCardThreeElement = document.querySelector(
+  "[id=imgPlayerCard3]"
+);
+
+//Card image element references for the dealer
+const _imgDealerCardOneElement = document.querySelector("[id=imgDealerCard1]");
+const _imgDealerCardTwoElement = document.querySelector("[id=imgDealerCard2]");
+
+//Span elements that display the score
+const _spanPlayerScoreElement = document.querySelector("[id=spnPlayerScore]");
+const _spanDealerScoreElement = document.querySelector("[id=spnDealerScore]");
+
+//Div element that is the card container
+const _divCardContainerElement = document.querySelector(
+  "[id=ctnCardContainer]"
+);
+
+//Div element that holds the result
+const _divCardResultContainerElement = document.querySelector("[id=ctnResult]");
+const _divCardResultLabelElement = document.querySelector("[id=lblResult]"); //Result label
+
+function initalizeGame() {
   //Hide the container element that holds the cards displayed to the player while initializing the game.
-  document.getElementById("ctnCardContainer").style.display = "none";
+  _divCardContainerElement.style.display = "none";
   //Hide the result container while initializing the game
-  document.getElementById("ctnResult").style.display = "none";
-  //Reset button is disabled when the game is loaded for the first time.
-  document.getElementById("btnRestartGame").className = "disabled-button";
+  _divCardResultContainerElement.style.display = "none";
 
   _bjPlay = new BJPlay(new BJCardGenerator());
 
@@ -45,11 +68,8 @@ function initalize() {
   hitButtonClickEvent();
   stayButtonClickEvent();
 
-  _hitButtonElement.classList.add("button");
-  _hitButtonElement.classList.add("hidden-button");
-
-  _stayButtonElement.classList.add("button");
-  _stayButtonElement.classList.add("hidden-button");
+  _hitButtonElement.className = "button hidden-button";
+  _stayButtonElement.className = "button hidden-button";
 }
 
 /**
@@ -72,19 +92,16 @@ function startGameButtonEvent() {
 
     //If the player gets 21 points, he wins and the game is over.
     if (_playerScore == BJNumbers.WinningScore) {
-      document.getElementById("ctnResult").style.display = "block";
+      _divCardResultContainerElement.style.display = "block";
       updateResult(_dealerScore, _playerScore);
-      resetButtonUIClasses();
+      resetButtonUI();
     }
 
     //Reveal the card container once the card binding has been completed.
-    document.getElementById("ctnCardContainer").style.display = "block";
+    _divCardContainerElement.style.display = "block";
 
-    _hitButtonElement.classList.remove("hidden-button");
-    _hitButtonElement.classList.add("revealed-button");
-
-    _stayButtonElement.classList.remove("hidden-button");
-    _stayButtonElement.classList.add("revealed-button");
+    _hitButtonElement.classList.replace("hidden-button", "revealed-button");
+    _stayButtonElement.classList.replace("hidden-button", "revealed-button");
 
     _startButtonElement.classList.add("disabled-button");
     _restartButtonElement.classList.remove("disabled-button");
@@ -96,10 +113,10 @@ function startGameButtonEvent() {
  */
 function restartGameButtonClickEvent() {
   _restartButtonElement.addEventListener("click", () => {
-    resetButtonUIClasses();
+    resetButtonUI();
 
-    document.getElementById("ctnCardContainer").style.display = "none";
-    document.getElementById("ctnResult").style.display = "none";
+    _divCardContainerElement.style.display = "none";
+    _divCardResultContainerElement.style.display = "none";
 
     if (document.querySelector(".cardImageControlDesktop"))
       document
@@ -115,7 +132,7 @@ function restartGameButtonClickEvent() {
         });
     }
 
-    document.getElementById("lblResult").innerHTML = "";
+    _divCardResultLabelElement.innerHTML = "";
     resetVariables();
   });
 }
@@ -125,7 +142,7 @@ function restartGameButtonClickEvent() {
  */
 function hitButtonClickEvent() {
   _hitButtonElement.addEventListener("click", () => {
-    document.getElementById("ctnResult").style.display = "block";
+    _divCardResultContainerElement.style.display = "block";
 
     _playerCardThree = _bjPlay.addAdditionalCardForPlayer();
     _playerScore += _playerCardThree.geCardPoint(_playerScore);
@@ -136,21 +153,10 @@ function hitButtonClickEvent() {
     setScores();
     updateResult(_dealerScore, _playerScore);
 
-    document.getElementById(
-      "imgPlayerCard3"
-    ).src = `assets/playingcardimages/${_playerCardThree.CardImageName}`;
+    _imgPlayerCardThreeElement.src = `assets/playingcardimages/${_playerCardThree.CardImageName}`;
+    _imgDealerCardTwoElement.src = `assets/playingcardimages/${_dealerCardTwo.CardImageName}`;
 
-    document.getElementById(
-      "imgDealerCard2"
-    ).src = `assets/playingcardimages/${_dealerCardTwo.CardImageName}`;
-
-    _startButtonElement.classList.remove("revealed-button");
-    _hitButtonElement.classList.remove("revealed-button");
-    _stayButtonElement.classList.remove("revealed-button");
-
-    _startButtonElement.classList.add("disabled-button");
-    _hitButtonElement.classList.add("disabled-button");
-    _stayButtonElement.classList.add("disabled-button");
+    gameoverButtonUI();
   });
 }
 
@@ -159,7 +165,7 @@ function hitButtonClickEvent() {
  */
 function stayButtonClickEvent() {
   _stayButtonElement.addEventListener("click", () => {
-    document.getElementById("ctnResult").style.display = "block";
+    _divCardResultContainerElement.style.display = "block";
 
     _dealerCardTwo = _bjPlay.addAdditionalCardForDealer();
     _dealerScore += _dealerCardTwo.geCardPoint(_dealerScore);
@@ -167,17 +173,9 @@ function stayButtonClickEvent() {
     setScores();
     updateResult(_dealerScore, _playerScore);
 
-    document.getElementById(
-      "imgDealerCard2"
-    ).src = `assets/playingcardimages/${_dealerCardTwo.CardImageName}`;
+    _imgDealerCardTwoElement.src = `assets/playingcardimages/${_dealerCardTwo.CardImageName}`;
 
-    _startButtonElement.classList.remove("revealed-button");
-    _hitButtonElement.classList.remove("revealed-button");
-    _stayButtonElement.classList.remove("revealed-button");
-
-    _startButtonElement.classList.add("disabled-button");
-    _hitButtonElement.classList.add("disabled-button");
-    _stayButtonElement.classList.add("disabled-button");
+    gameoverButtonUI();
   });
 }
 
@@ -185,30 +183,17 @@ function stayButtonClickEvent() {
  * Set the initial playing card image for both players.
  */
 function setInitialCardImages() {
-  document.getElementById(
-    "imgPlayerCard1"
-  ).src = `assets/playingcardimages/${_playerCardOne.CardImageName}`;
-
-  document.getElementById(
-    "imgPlayerCard2"
-  ).src = `assets/playingcardimages/${_playerCardTwo.CardImageName}`;
-
-  document.getElementById(
-    "imgDealerCard1"
-  ).src = `assets/playingcardimages/${_dealerCardOne.CardImageName}`;
+  _imgPlayerCardOneElement.src = `assets/playingcardimages/${_playerCardOne.CardImageName}`;
+  _imgPlayerCardTwoElement.src = `assets/playingcardimages/${_playerCardTwo.CardImageName}`;
+  _imgDealerCardOneElement.src = `assets/playingcardimages/${_dealerCardOne.CardImageName}`;
 }
 
 /**
  * Set the total score for both player and the dealer.
  */
 function setScores() {
-  document.getElementById(
-    "spnPlayerScore"
-  ).innerHTML = `Score is '${_playerScore.toString()}'`;
-
-  document.getElementById(
-    "spnDealerScore"
-  ).innerHTML = `Score is '${_dealerScore.toString()}'`;
+  _spanPlayerScoreElement.innerHTML = `Score is '${_playerScore.toString()}'`;
+  _spanDealerScoreElement.innerHTML = `Score is '${_dealerScore.toString()}'`;
 }
 
 /**
@@ -227,12 +212,24 @@ function resetVariables() {
   _dealerScore = 0;
 }
 
-function resetButtonUIClasses() {
+/**
+ * Defines the button CSS class when the game has been restarted.
+ */
+function resetButtonUI() {
   _startButtonElement.className = "button";
   //The restart button is disabled until another game is in progress or completed.
   _restartButtonElement.className = "button disabled-button";
   _hitButtonElement.className = "button hidden-button";
   _stayButtonElement.className = "button hidden-button";
+}
+
+/**
+ * Defines the button CSS class when the game is over.
+ */
+function gameoverButtonUI() {
+  _startButtonElement.classList.replace("revealed-button", "disabled-button");
+  _hitButtonElement.classList.replace("revealed-button", "disabled-button");
+  _stayButtonElement.classList.replace("revealed-button", "disabled-button");
 }
 
 /**
@@ -252,7 +249,7 @@ function updateResult(dealerScore, playerScore) {
     }
   } else resultString = "It is a Draw!";
 
-  document.getElementById("lblResult").innerHTML = resultString;
+  _divCardResultLabelElement.innerHTML = resultString;
 }
 
-window.onload = initalize;
+window.onload = initalizeGame;
