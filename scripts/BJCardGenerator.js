@@ -23,7 +23,7 @@ export default class BJCardGenerator {
    * Method that returns a deck of 52 playing cards.
    * @returns An array collection of 52 cards.
    */
-  GenerateDeckOfCards() {
+  generateDeckOfCards() {
     for (
       let cardFamilyIndex = 0;
       cardFamilyIndex < this._cardFamilyCollection.length;
@@ -76,7 +76,7 @@ export default class BJCardGenerator {
    * Generate a collection if required and return the playing cards with it's points as a string array.
    * @returns Collection of cards along with it's points as string array.
    */
-  ViewCardCollectionwithPoints() {
+  viewCardCollectionwithPoints() {
     if (this._bjViewCardCollection.length > 0)
       return this._bjViewCardCollection;
 
@@ -94,8 +94,8 @@ export default class BJCardGenerator {
           );
       });
     } else {
-      this.GenerateDeckOfCards();
-      this.ViewCardCollectionwithPoints();
+      this.generateDeckOfCards();
+      this.viewCardCollectionwithPoints();
     }
 
     return this._bjViewCardCollection;

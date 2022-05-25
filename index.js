@@ -11,6 +11,7 @@
 import BJCardGenerator from "./scripts/BJCardGenerator.js";
 import BJPlay from "./scripts/BJPlay.js";
 import BJResult from "./scripts/BJResult.js";
+import BJNumbers from "./scripts/constants/BJNumbers.const.js";
 
 var _bjPlay = {};
 
@@ -47,21 +48,21 @@ function startGameButtonEvent() {
     document.getElementById("btnHit").style.visibility = "visible";
     document.getElementById("btnStay").style.visibility = "visible";
 
-    _playerCardOne = _bjPlay.getPlayersCards[0];
-    _playerCardTwo = _bjPlay.getPlayersCards[1];
+    _playerCardOne = _bjPlay.GetPlayersCards[0];
+    _playerCardTwo = _bjPlay.GetPlayersCards[1];
 
     _playerScore =
       _playerCardOne.geCardPoint(0) +
       _playerCardTwo.geCardPoint(Number(_playerCardOne.CardPoints));
 
-    _dealerCardOne = _bjPlay.getDealersCards[0];
+    _dealerCardOne = _bjPlay.GetDealersCards[0];
     _dealerScore = _dealerCardOne.geCardPoint(0);
 
     setInitialCardImages();
     setScores();
 
     //If the player gets 21 points, he wins and the game is over.
-    if (_playerScore == 21) {
+    if (_playerScore == BJNumbers.WinningScore) {
       document.getElementById("ctnResult").style.display = "block";
 
       updateResult(_dealerScore, _playerScore);
