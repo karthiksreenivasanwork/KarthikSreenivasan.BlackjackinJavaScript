@@ -4,8 +4,11 @@
  * Example: Ace is worth 1 or 11, whichever makes a better hand.
  */
 const BJCardValue = {
-  AceOne: 1,
-  AceEleven: 11,
+  Ace: {
+    //Nested sub-object to define the possible score for Ace
+    AceOne: 1,
+    AceEleven: 11,
+  },
   Two: 2,
   Three: 3,
   Four: 4,
@@ -17,7 +20,7 @@ const BJCardValue = {
   Ten: 10,
   Jack: 10,
   Queen: 10,
-  Kind: 10,
+  King: 10,
 };
 //Prevents adding new values or update the playing card structure.
 Object.freeze(BJCardValue);

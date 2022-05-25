@@ -66,10 +66,10 @@ export default class BJCard {
      * or lower return Ace point with 11. Otherwise, return Ace point of 1.
      */
     if (this.CardName == BJStrings.Ace) {
-      let scoreWithHighAceValue = currentScore + BJCardValue.AceEleven;
+      let scoreWithHighAceValue = currentScore + BJCardValue.Ace.AceEleven;
       if (scoreWithHighAceValue <= BJNumbers.WinningScore)
-        return BJCardValue.AceEleven;
-      else return BJCardValue.AceOne;
+        return BJCardValue.Ace.AceEleven;
+      else return BJCardValue.Ace.AceOne;
     }
     return this.CardPoints;
   }

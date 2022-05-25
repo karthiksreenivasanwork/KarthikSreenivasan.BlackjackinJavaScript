@@ -60,6 +60,17 @@ function startGameButtonEvent() {
     setInitialCardImages();
     setScores();
 
+    //If the player gets 21 points, he wins and the game is over.
+    if (_playerScore == 21) {
+      document.getElementById("ctnResult").style.display = "block";
+
+      updateResult(_dealerScore, _playerScore);
+
+      document.getElementById("btnHit").className = "disabled-button";
+      document.getElementById("btnStay").className = "disabled-button";
+      document.getElementById("btnStartGame").className = "disabled-button";
+    }
+
     //Reveal the card container once the card binding has been completed.
     document.getElementById("ctnCardContainer").style.display = "block";
   });
@@ -113,7 +124,7 @@ function hitButtonClickEvent() {
     _dealerScore += _dealerCardTwo.geCardPoint(_dealerScore);
 
     setScores();
-    updateResult();
+    updateResult(_dealerScore, _playerScore);
 
     document.getElementById(
       "imgPlayerCard3"
@@ -141,7 +152,7 @@ function stayButtonClickEvent() {
     _dealerScore += _dealerCardTwo.geCardPoint(_dealerScore);
 
     setScores();
-    updateResult();
+    updateResult(_dealerScore, _playerScore);
 
     document.getElementById(
       "imgDealerCard2"
@@ -199,8 +210,13 @@ function resetVariables() {
   _dealerScore = 0;
 }
 
-function updateResult() {
-  let resultRef = new BJResult(_dealerScore, _playerScore);
+/**
+ * This function ditermines the winner of the game
+ * @param {number} dealerScore Dealer's total score
+ * @param {number} playerScore Player's total score
+ */
+function updateResult(dealerScore, playerScore) {
+  let resultRef = new BJResult(dealerScore, playerScore);
   let resultString = "";
 
   if (resultRef.HasWinnerDeclared) {

@@ -1,6 +1,7 @@
 import BJFamily from "./constants/BJFamily.const.js";
 import BJCard from "./BJCard.js";
 import BJStrings from "./constants/BJStrings.const.js";
+import BJCardValue from "./constants/BJCardvalue.const.js";
 
 /**
  * Generates a deck of cards totaling to 52 cards.
@@ -41,20 +42,31 @@ export default class BJCardGenerator {
         );
       }
       this._bjCardCollection.push(
+        new BJCard(BJStrings.Ace, Object.keys(BJFamily)[cardFamilyIndex], [
+          BJCardValue.Ace.AceOne,
+          BJCardValue.Ace.AceEleven,
+        ])
+      );
+      this._bjCardCollection.push(
         new BJCard(
-          BJStrings.Ace,
+          BJStrings.Jack,
           Object.keys(BJFamily)[cardFamilyIndex],
-          [1, 11]
+          BJCardValue.Jack
         )
       );
       this._bjCardCollection.push(
-        new BJCard(BJStrings.Jack, Object.keys(BJFamily)[cardFamilyIndex], 10)
+        new BJCard(
+          BJStrings.Queen,
+          Object.keys(BJFamily)[cardFamilyIndex],
+          BJCardValue.Queen
+        )
       );
       this._bjCardCollection.push(
-        new BJCard(BJStrings.Queen, Object.keys(BJFamily)[cardFamilyIndex], 10)
-      );
-      this._bjCardCollection.push(
-        new BJCard(BJStrings.King, Object.keys(BJFamily)[cardFamilyIndex], 10)
+        new BJCard(
+          BJStrings.King,
+          Object.keys(BJFamily)[cardFamilyIndex],
+          BJCardValue.King
+        )
       );
     }
     return this._bjCardCollection;
