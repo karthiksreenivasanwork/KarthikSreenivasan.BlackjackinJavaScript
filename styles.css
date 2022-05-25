@@ -126,3 +126,11 @@ body {
   margin: 5px;
   pointer-events: none;
 }
+
+.hidden-button {
+  visibility: hidden;
+}
+
+.revealed-button {
+  visibility: visible;
+}

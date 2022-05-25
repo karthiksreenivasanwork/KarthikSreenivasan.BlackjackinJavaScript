@@ -25,11 +25,18 @@ var _dealerCardTwo = {};
 var _playerScore = 0;
 var _dealerScore = 0;
 
+const _startButtonElement = document.querySelector("[id=btnStartGame]");
+const _restartButtonElement = document.querySelector("[id=btnRestartGame]");
+const _hitButtonElement = document.querySelector("[id=btnHit]");
+const _stayButtonElement = document.querySelector("[id=btnStay]");
+
 function initalize() {
   //Hide the container element that holds the cards displayed to the player while initializing the game.
   document.getElementById("ctnCardContainer").style.display = "none";
   //Hide the result container while initializing the game
   document.getElementById("ctnResult").style.display = "none";
+  //Reset button is disabled when the game is loaded for the first time.
+  document.getElementById("btnRestartGame").className = "disabled-button";
 
   _bjPlay = new BJPlay(new BJCardGenerator());
 
@@ -37,17 +44,19 @@ function initalize() {
   restartGameButtonClickEvent();
   hitButtonClickEvent();
   stayButtonClickEvent();
+
+  _hitButtonElement.classList.add("button");
+  _hitButtonElement.classList.add("hidden-button");
+
+  _stayButtonElement.classList.add("button");
+  _stayButtonElement.classList.add("hidden-button");
 }
 
 /**
  * Register the `Start Game` button click event.
  */
 function startGameButtonEvent() {
-  var startGameButton = document.getElementById("btnStartGame");
-  startGameButton.addEventListener("click", () => {
-    document.getElementById("btnHit").style.visibility = "visible";
-    document.getElementById("btnStay").style.visibility = "visible";
-
+  _startButtonElement.addEventListener("click", () => {
     _playerCardOne = _bjPlay.GetPlayersCards[0];
     _playerCardTwo = _bjPlay.GetPlayersCards[1];
 
@@ -64,16 +73,21 @@ function startGameButtonEvent() {
     //If the player gets 21 points, he wins and the game is over.
     if (_playerScore == BJNumbers.WinningScore) {
       document.getElementById("ctnResult").style.display = "block";
-
       updateResult(_dealerScore, _playerScore);
-
-      document.getElementById("btnHit").className = "disabled-button";
-      document.getElementById("btnStay").className = "disabled-button";
-      document.getElementById("btnStartGame").className = "disabled-button";
+      resetButtonUIClasses();
     }
 
     //Reveal the card container once the card binding has been completed.
     document.getElementById("ctnCardContainer").style.display = "block";
+
+    _hitButtonElement.classList.remove("hidden-button");
+    _hitButtonElement.classList.add("revealed-button");
+
+    _stayButtonElement.classList.remove("hidden-button");
+    _stayButtonElement.classList.add("revealed-button");
+
+    _startButtonElement.classList.add("disabled-button");
+    _restartButtonElement.classList.remove("disabled-button");
   });
 }
 
@@ -81,30 +95,27 @@ function startGameButtonEvent() {
  * Register the `Restart Game` button click event.
  */
 function restartGameButtonClickEvent() {
-  var restartGameButton = document.getElementById("btnRestartGame");
-  restartGameButton.addEventListener("click", () => {
-    document.getElementById("btnHit").style.visibility = "hidden";
-    document.getElementById("btnHit").disabled = false;
-
-    document.getElementById("btnStay").style.visibility = "hidden";
-    document.getElementById("btnStay").disabled = false;
+  _restartButtonElement.addEventListener("click", () => {
+    resetButtonUIClasses();
 
     document.getElementById("ctnCardContainer").style.display = "none";
     document.getElementById("ctnResult").style.display = "none";
 
-    document.getElementById("btnHit").className = "button";
-    document.getElementById("btnStay").className = "button";
-    document.getElementById("btnStartGame").className = "button";
-
-    document.getElementById("imgPlayerCard1").src = "";
-    document.getElementById("imgPlayerCard2").src = "";
-    document.getElementById("imgPlayerCard3").src = "";
-
-    document.getElementById("imgDealerCard1").src = "";
-    document.getElementById("imgDealerCard2").src = "";
+    if (document.querySelector(".cardImageControlDesktop"))
+      document
+        .querySelectorAll(".cardImageControlDesktop")
+        .forEach((element) => {
+          element.src = "";
+        });
+    else {
+      document
+        .querySelectorAll(".cardImageControlMobile")
+        .forEach((element) => {
+          element.src = "";
+        });
+    }
 
     document.getElementById("lblResult").innerHTML = "";
-
     resetVariables();
   });
 }
@@ -113,9 +124,7 @@ function restartGameButtonClickEvent() {
  * Register the `Hit` button click event.
  */
 function hitButtonClickEvent() {
-  let hitGameButton = document.getElementById("btnHit");
-
-  hitGameButton.addEventListener("click", () => {
+  _hitButtonElement.addEventListener("click", () => {
     document.getElementById("ctnResult").style.display = "block";
 
     _playerCardThree = _bjPlay.addAdditionalCardForPlayer();
@@ -135,9 +144,13 @@ function hitButtonClickEvent() {
       "imgDealerCard2"
     ).src = `assets/playingcardimages/${_dealerCardTwo.CardImageName}`;
 
-    document.getElementById("btnHit").className = "disabled-button";
-    document.getElementById("btnStay").className = "disabled-button";
-    document.getElementById("btnStartGame").className = "disabled-button";
+    _startButtonElement.classList.remove("revealed-button");
+    _hitButtonElement.classList.remove("revealed-button");
+    _stayButtonElement.classList.remove("revealed-button");
+
+    _startButtonElement.classList.add("disabled-button");
+    _hitButtonElement.classList.add("disabled-button");
+    _stayButtonElement.classList.add("disabled-button");
   });
 }
 
@@ -145,8 +158,7 @@ function hitButtonClickEvent() {
  * Register the `Stay` button click event.
  */
 function stayButtonClickEvent() {
-  let stayGameButton = document.getElementById("btnStay");
-  stayGameButton.addEventListener("click", () => {
+  _stayButtonElement.addEventListener("click", () => {
     document.getElementById("ctnResult").style.display = "block";
 
     _dealerCardTwo = _bjPlay.addAdditionalCardForDealer();
@@ -159,9 +171,13 @@ function stayButtonClickEvent() {
       "imgDealerCard2"
     ).src = `assets/playingcardimages/${_dealerCardTwo.CardImageName}`;
 
-    document.getElementById("btnHit").className = "disabled-button";
-    document.getElementById("btnStay").className = "disabled-button";
-    document.getElementById("btnStartGame").className = "disabled-button";
+    _startButtonElement.classList.remove("revealed-button");
+    _hitButtonElement.classList.remove("revealed-button");
+    _stayButtonElement.classList.remove("revealed-button");
+
+    _startButtonElement.classList.add("disabled-button");
+    _hitButtonElement.classList.add("disabled-button");
+    _stayButtonElement.classList.add("disabled-button");
   });
 }
 
@@ -209,6 +225,14 @@ function resetVariables() {
 
   _playerScore = 0;
   _dealerScore = 0;
+}
+
+function resetButtonUIClasses() {
+  _startButtonElement.className = "button";
+  //The restart button is disabled until another game is in progress or completed.
+  _restartButtonElement.className = "button disabled-button";
+  _hitButtonElement.className = "button hidden-button";
+  _stayButtonElement.className = "button hidden-button";
 }
 
 /**
