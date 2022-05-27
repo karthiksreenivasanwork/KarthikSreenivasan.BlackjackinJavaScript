@@ -8,10 +8,10 @@
    before declaring the winner.
 */
 
-import BJCardGenerator from "./scripts/BJCardGenerator.js";
-import BJPlay from "./scripts/BJPlay.js";
-import BJResult from "./scripts/BJResult.js";
-import BJNumbers from "./scripts/constants/BJNumbers.const.js";
+import BJCardGenerator from "./assets/js/BJCardGenerator.js";
+import BJPlay from "./assets/js/BJPlay.js";
+import BJResult from "./assets/js/BJResult.js";
+import BJNumbers from "./assets/js/constants/BJNumbers.const.js";
 
 var _bjPlay = {};
 
