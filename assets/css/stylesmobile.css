@@ -1,0 +1,133 @@
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+}
+
+.flex-container {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: center; /* Horizontal center */
+  align-items: center; /* Vertical center */
+  background-image: linear-gradient(
+    to bottom right,
+    rgb(246, 150, 150),
+    rgb(122, 248, 122),
+    rgb(245, 245, 120)
+  );
+}
+
+.flex-container-border {
+  width: auto;
+  border-radius: 10px;
+  border: 5px solid green;
+  background-color: white;
+}
+
+.flex-item {
+  width: 360px;
+  height: auto;
+  text-align: center;
+  font-size: 1em;
+  padding-bottom: 10px;
+}
+
+.primaryButtonContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.secondaryButtonContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.dealerCardContainer {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.playerCardContainer {
+  text-align: left;
+}
+
+.cardImageControl {
+  height: 100px;
+  width: auto;
+  border: solid 3px green;
+  border-radius: 5px;
+  padding: 1px;
+  margin: 0px 3px;
+}
+
+.button {
+  border: 0;
+  padding: 7px 10px;
+  font-size: 14px;
+  text-shadow: 1px 1px 1px #000;
+  background-image: linear-gradient(
+    to top left,
+    rgba(0, 0, 0, 0.2),
+    rgba(0, 0, 0, 0.2) 40%,
+    rgba(0, 0, 0, 0)
+  );
+  box-shadow: inset 2px 2px 3px rgba(255, 255, 255, 0.6),
+    inset -2px -2px 3px rgba(0, 0, 0, 0.6);
+  border-radius: 10px;
+  color: rgb(255, 255, 255);
+  width: 100px;
+  margin: 5px;
+}
+.enabled-button {
+  background-color: rgb(27, 211, 116);
+}
+.disabled-button {
+  background-color: #808080;
+  pointer-events: none;
+}
+
+.button:hover {
+  background-color: rgb(51, 255, 0);
+}
+
+.button:active {
+  box-shadow: inset -2px -2px 3px rgba(255, 255, 255, 0.6);
+}
+
+.header {
+  font-size: 20px;
+  padding: 10px 0px;
+}
+
+.result {
+  font-size: 14px;
+  background-color: aqua;
+  padding: 7px 0px;
+  border-top: 2px solid #336699;
+  border-bottom: 2px solid #336699;
+}
+
+.sub-header {
+  font-size: 14px;
+  line-height: 1;
+  background-color: rgb(0, 255, 191);
+  border-top: 2px solid #336699;
+  border-bottom: 2px solid #336699;
+  width: auto;
+  padding: 7px 0px;
+}
+
+.hidden-button {
+  visibility: hidden;
+}
+
+.revealed-button {
+  visibility: visible;
+}

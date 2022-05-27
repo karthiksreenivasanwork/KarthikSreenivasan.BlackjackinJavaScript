@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" />
 
     <script
       type="module"
@@ -32,12 +32,14 @@
     <script type="module" src="index.js" async></script>
 
     <!--
+        Purpose: Apply style sheet based on the screen size.
+
         Media queries must be applied after the page is rendered.
         Hence, we use the deferred rendering
     -->
     <script
       type="module"
-      src="scripts/mediaquery/BJMediaQueryForCard.js"
+      src="scripts/mediaquery/BJApplyDynamicCss.js"
       defer
     ></script>
 
@@ -60,20 +62,22 @@
         </div>
 
         <div class="flex-item" id="ctnResult">
-          <div class="sub-header" id="lblResult"></div>
+          <div class="result" id="lblResult"></div>
         </div>
 
         <div class="flex-item">
           <div class="primaryButtonContainer">
-            <div id="btnStartGame" class="button">Start Game</div>
+            <div id="btnStartGame" class="button enabled-button">
+              Start Game
+            </div>
             <div id="btnRestartGame" class="button disabled-button">
               Restart Game
             </div>
           </div>
 
           <div class="secondaryButtonContainer">
-            <div id="btnHit">Hit</div>
-            <div id="btnStay">Stay</div>
+            <div id="btnHit" class="button enabled-button">Hit</div>
+            <div id="btnStay" class="button enabled-button">Stay</div>
           </div>
         </div>
 
@@ -82,26 +86,18 @@
             <div class="dealerCardContainer">
               <div class="flex-item">
                 <div class="sub-header">
-                  Dealer's hand / <span id="spnDealerScore"></span>
+                  Dealer's <span id="spnDealerScore"></span>
                 </div>
               </div>
-              <div class="flex-item">
-                <img id="imgDealerCard1" class="cardImageControlDesktop" />
-                <img id="imgDealerCard2" class="cardImageControlDesktop" />
-              </div>
+              <div class="flex-item" id="ctnDealerCardImages"></div>
             </div>
-
             <div class="playerCardContainer">
               <div class="flex-item">
                 <div class="sub-header">
-                  Players's hand / <span id="spnPlayerScore"></span>
+                  Players's <span id="spnPlayerScore"></span>
                 </div>
               </div>
-              <div class="flex-item">
-                <img id="imgPlayerCard1" class="cardImageControlDesktop" />
-                <img id="imgPlayerCard2" class="cardImageControlDesktop" />
-                <img id="imgPlayerCard3" class="cardImageControlDesktop" />
-              </div>
+              <div class="flex-item" id="ctnPlayerCardImages"></div>
             </div>
           </div>
         </div>

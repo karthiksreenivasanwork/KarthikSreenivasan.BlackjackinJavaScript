@@ -2,7 +2,7 @@
   Logical flow of the game
   ------------------------
 1. Initialize one card for the dealer and 2 cards for the player.
-2. If the player is hitting, then add one additional card for dealer 
+2. If the player is hitting, then add one additional card for dealer
    as well as player before declaring the winner.
 3. If the player is staying, then add one additonal card for the dealer
    before declaring the winner.
@@ -31,17 +31,6 @@ const _restartButtonElement = document.querySelector("[id=btnRestartGame]");
 const _hitButtonElement = document.querySelector("[id=btnHit]");
 const _stayButtonElement = document.querySelector("[id=btnStay]");
 
-//Card imageelement references for the player
-const _imgPlayerCardOneElement = document.querySelector("[id=imgPlayerCard1]");
-const _imgPlayerCardTwoElement = document.querySelector("[id=imgPlayerCard2]");
-const _imgPlayerCardThreeElement = document.querySelector(
-  "[id=imgPlayerCard3]"
-);
-
-//Card image element references for the dealer
-const _imgDealerCardOneElement = document.querySelector("[id=imgDealerCard1]");
-const _imgDealerCardTwoElement = document.querySelector("[id=imgDealerCard2]");
-
 //Span elements that display the score
 const _spanPlayerScoreElement = document.querySelector("[id=spnPlayerScore]");
 const _spanDealerScoreElement = document.querySelector("[id=spnDealerScore]");
@@ -68,10 +57,11 @@ function initalizeGame() {
   hitButtonClickEvent();
   stayButtonClickEvent();
 
-  _hitButtonElement.className = "button hidden-button";
-  _stayButtonElement.className = "button hidden-button";
+  _hitButtonElement.className = "button enabled-button hidden-button";
+  _stayButtonElement.className = "button enabled-button hidden-button";
 }
 
+//#region Button events
 /**
  * Register the `Start Game` button click event.
  */
@@ -87,24 +77,29 @@ function startGameButtonEvent() {
     _dealerCardOne = _bjPlay.GetDealersCards[0];
     _dealerScore = _dealerCardOne.geCardPoint(0);
 
+    initializePlayerCardImageElements(2);
+    initializDealerCardImageElements(1);
+
     setInitialCardImages();
     setScores();
+
+    //Reveal the card container once the card binding has been completed.
+    _divCardContainerElement.style.display = "block";
+    _hitButtonElement.classList.replace("hidden-button", "revealed-button");
+    _stayButtonElement.classList.replace("hidden-button", "revealed-button");
+
+    _startButtonElement.classList.replace("enabled-button", "disabled-button");
+    _restartButtonElement.classList.replace(
+      "disabled-button",
+      "enabled-button"
+    );
 
     //If the player gets 21 points, he wins and the game is over.
     if (_playerScore == BJNumbers.WinningScore) {
       _divCardResultContainerElement.style.display = "block";
       updateResult(_dealerScore, _playerScore);
-      resetButtonUI();
+      gameoverButtonUI();
     }
-
-    //Reveal the card container once the card binding has been completed.
-    _divCardContainerElement.style.display = "block";
-
-    _hitButtonElement.classList.replace("hidden-button", "revealed-button");
-    _stayButtonElement.classList.replace("hidden-button", "revealed-button");
-
-    _startButtonElement.classList.add("disabled-button");
-    _restartButtonElement.classList.remove("disabled-button");
   });
 }
 
@@ -113,26 +108,18 @@ function startGameButtonEvent() {
  */
 function restartGameButtonClickEvent() {
   _restartButtonElement.addEventListener("click", () => {
-    resetButtonUI();
-
     _divCardContainerElement.style.display = "none";
     _divCardResultContainerElement.style.display = "none";
 
-    if (document.querySelector(".cardImageControlDesktop"))
-      document
-        .querySelectorAll(".cardImageControlDesktop")
-        .forEach((element) => {
-          element.src = "";
-        });
-    else {
-      document
-        .querySelectorAll(".cardImageControlMobile")
-        .forEach((element) => {
-          element.src = "";
-        });
+    if (document.querySelector(".cardImageControl")) {
+      document.querySelectorAll(".cardImageControl").forEach((element) => {
+        element.remove();
+      });
     }
 
     _divCardResultLabelElement.innerHTML = "";
+
+    resetButtonUI();
     resetVariables();
   });
 }
@@ -142,6 +129,14 @@ function restartGameButtonClickEvent() {
  */
 function hitButtonClickEvent() {
   _hitButtonElement.addEventListener("click", () => {
+    addDeaderCardImageElement();
+    addPlayerCardImageElement();
+
+    let imgPlayerCardThreeElement = document.querySelector(
+      "[id=imgPlayerCard3]"
+    );
+    let imgDealerCardTwoElement = document.querySelector("[id=imgDealerCard2]");
+
     _divCardResultContainerElement.style.display = "block";
 
     _playerCardThree = _bjPlay.addAdditionalCardForPlayer();
@@ -153,8 +148,14 @@ function hitButtonClickEvent() {
     setScores();
     updateResult(_dealerScore, _playerScore);
 
-    _imgPlayerCardThreeElement.src = `assets/playingcardimages/${_playerCardThree.CardImageName}`;
-    _imgDealerCardTwoElement.src = `assets/playingcardimages/${_dealerCardTwo.CardImageName}`;
+    imgPlayerCardThreeElement.setAttribute(
+      "src",
+      `assets/playingcardimages/${_playerCardThree.CardImageName}`
+    );
+    imgDealerCardTwoElement.setAttribute(
+      "src",
+      `assets/playingcardimages/${_dealerCardTwo.CardImageName}`
+    );
 
     gameoverButtonUI();
   });
@@ -165,6 +166,9 @@ function hitButtonClickEvent() {
  */
 function stayButtonClickEvent() {
   _stayButtonElement.addEventListener("click", () => {
+    addDeaderCardImageElement();
+    let imgDealerCardTwoElement = document.querySelector("[id=imgDealerCard2]");
+
     _divCardResultContainerElement.style.display = "block";
 
     _dealerCardTwo = _bjPlay.addAdditionalCardForDealer();
@@ -173,27 +177,91 @@ function stayButtonClickEvent() {
     setScores();
     updateResult(_dealerScore, _playerScore);
 
-    _imgDealerCardTwoElement.src = `assets/playingcardimages/${_dealerCardTwo.CardImageName}`;
+    imgDealerCardTwoElement.setAttribute(
+      "src",
+      `assets/playingcardimages/${_dealerCardTwo.CardImageName}`
+    );
 
     gameoverButtonUI();
   });
 }
+//#endregion
+
+//#region Function that handle the image elements.
 
 /**
  * Set the initial playing card image for both players.
  */
 function setInitialCardImages() {
-  _imgPlayerCardOneElement.src = `assets/playingcardimages/${_playerCardOne.CardImageName}`;
-  _imgPlayerCardTwoElement.src = `assets/playingcardimages/${_playerCardTwo.CardImageName}`;
-  _imgDealerCardOneElement.src = `assets/playingcardimages/${_dealerCardOne.CardImageName}`;
+  let imgPlayerCardOneElement = document.querySelector("[id=imgPlayerCard1]");
+  let imgPlayerCardTwoElement = document.querySelector("[id=imgPlayerCard2]");
+  let imgDealerCardOneElement = document.querySelector("[id=imgDealerCard1]");
+
+  imgPlayerCardOneElement.setAttribute(
+    "src",
+    `assets/playingcardimages/${_playerCardOne.CardImageName}`
+  );
+  imgPlayerCardTwoElement.setAttribute(
+    "src",
+    `assets/playingcardimages/${_playerCardTwo.CardImageName}`
+  );
+  imgDealerCardOneElement.setAttribute(
+    "src",
+    `assets/playingcardimages/${_dealerCardOne.CardImageName}`
+  );
 }
+
+function addDeaderCardImageElement() {
+  let dealerCardContainer = document.querySelector("[id=ctnDealerCardImages]");
+  let childElementCount = dealerCardContainer.childNodes.length;
+  let dealerImageID = `imgDealerCard${childElementCount + 1}`;
+  addImageElement(dealerCardContainer, dealerImageID);
+}
+
+function addPlayerCardImageElement() {
+  let playerCardContainer = document.querySelector("[id=ctnPlayerCardImages]");
+  let childElementCount = playerCardContainer.childNodes.length;
+  let playerImageID = `imgPlayerCard${childElementCount + 1}`;
+  addImageElement(playerCardContainer, playerImageID);
+}
+
+function initializDealerCardImageElements(cardCount) {
+  let dealerCardContainer = document.querySelector("[id=ctnDealerCardImages]");
+  let dealerImageID = "imgDealerCard";
+  for (let i = 1; i <= cardCount; i++) {
+    addImageElement(dealerCardContainer, `${dealerImageID}${i}`);
+  }
+}
+
+function initializePlayerCardImageElements(cardCount) {
+  let playerCardContainer = document.querySelector("[id=ctnPlayerCardImages]");
+  let playerImageID = "imgPlayerCard";
+  for (let i = 1; i <= cardCount; i++) {
+    addImageElement(playerCardContainer, `${playerImageID}${i}`);
+  }
+}
+
+function addImageElement(parentContainer, imgElementId) {
+  parentContainer.append(createImageElement(imgElementId));
+}
+
+function createImageElement(imgElementId) {
+  let imgCardElement = document.createElement("img");
+  imgCardElement.classList.add("cardImageControl");
+  imgCardElement.setAttribute("id", imgElementId);
+  return imgCardElement;
+}
+
+//#endregion
+
+//#region Other functions
 
 /**
  * Set the total score for both player and the dealer.
  */
 function setScores() {
-  _spanPlayerScoreElement.innerHTML = `Score is '${_playerScore.toString()}'`;
-  _spanDealerScoreElement.innerHTML = `Score is '${_dealerScore.toString()}'`;
+  _spanPlayerScoreElement.innerHTML = `Score is: ${_playerScore.toString()}`;
+  _spanDealerScoreElement.innerHTML = `Score is: ${_dealerScore.toString()}`;
 }
 
 /**
@@ -216,11 +284,11 @@ function resetVariables() {
  * Defines the button CSS class when the game has been restarted.
  */
 function resetButtonUI() {
-  _startButtonElement.className = "button";
+  _startButtonElement.className = "button enabled-button";
   //The restart button is disabled until another game is in progress or completed.
   _restartButtonElement.className = "button disabled-button";
-  _hitButtonElement.className = "button hidden-button";
-  _stayButtonElement.className = "button hidden-button";
+  _hitButtonElement.className = "button enabled-button hidden-button";
+  _stayButtonElement.className = "button enabled-button hidden-button";
 }
 
 /**
@@ -252,4 +320,5 @@ function updateResult(dealerScore, playerScore) {
   _divCardResultLabelElement.innerHTML = resultString;
 }
 
+//#endregion
 window.onload = initalizeGame;

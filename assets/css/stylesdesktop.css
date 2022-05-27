@@ -30,7 +30,7 @@ body {
 }
 
 .flex-item {
-  width: 350px;
+  width: 360px;
   height: auto;
   text-align: center;
   font-size: 1em;
@@ -58,14 +58,13 @@ body {
   text-align: left;
 }
 
-.cardImageControlDesktop {
+.cardImageControl {
   height: 150px;
   width: auto;
-}
-
-.cardImageControlMobile {
-  height: 100px;
-  width: auto;
+  border: solid 3px green;
+  border-radius: 5px;
+  padding: 1px;
+  margin: 0px 3px;
 }
 
 .button {
@@ -73,7 +72,6 @@ body {
   padding: 10px 10px;
   font-size: 17px;
   text-shadow: 1px 1px 1px #000;
-  background-color: rgb(27, 211, 116);
   background-image: linear-gradient(
     to top left,
     rgba(0, 0, 0, 0.2),
@@ -86,6 +84,13 @@ body {
   color: rgb(255, 255, 255);
   width: 100px;
   margin: 5px;
+}
+.enabled-button {
+  background-color: rgb(27, 211, 116);
+}
+.disabled-button {
+  background-color: #808080;
+  pointer-events: none;
 }
 
 .button:hover {
@@ -98,33 +103,25 @@ body {
 
 .header {
   font-size: 25px;
-  line-height: 2;
+  padding: 10px 0px;
+}
+
+.result {
+  font-size: 20px;
+  background-color: aqua;
+  padding: 7px 0px;
+  border-top: 2px solid #336699;
+  border-bottom: 2px solid #336699;
 }
 
 .sub-header {
   font-size: 18px;
   line-height: 1;
-}
-
-.disabled-button {
-  border: 0;
-  padding: 10px 10px;
-  font-size: 17px;
-  text-shadow: 1px 1px 1px #000;
-  background-color: #808080;
-  background-image: linear-gradient(
-    to top left,
-    rgba(0, 0, 0, 0.2),
-    rgba(0, 0, 0, 0.2) 40%,
-    rgba(0, 0, 0, 0)
-  );
-  box-shadow: inset 2px 2px 3px rgba(255, 255, 255, 0.6),
-    inset -2px -2px 3px rgba(0, 0, 0, 0.6);
-  border-radius: 10px;
-  color: rgb(255, 255, 255);
-  width: 100px;
-  margin: 5px;
-  pointer-events: none;
+  background-color: rgb(0, 255, 191);
+  border-top: 2px solid #336699;
+  border-bottom: 2px solid #336699;
+  width: auto;
+  padding: 7px 0px;
 }
 
 .hidden-button {

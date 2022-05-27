@@ -8,7 +8,7 @@ Please visit my LinkedIn profile page [here.](https://www.linkedin.com/in/karthi
 
 ## User Interface
 
-![Blackjack in Javascript - Showcasing a player's win](/gitimages/KarthikSreenivasan.BlackjackinJavaScript_UserInterface.png)
+![Blackjack in Javascript - Showcasing a player's win](/assets/gitimages/KarthikSreenivasan.BlackjackinJavaScript_UserInterface.png)
 
 ## Game Rules
 
@@ -25,4 +25,4 @@ Please visit my LinkedIn profile page [here.](https://www.linkedin.com/in/karthi
 
 ## Blackjack in Angular | User Interface
 
-![Blackjack in Angular - Showcasing a player's win](/gitimages/KarthikSreenivasan.BlackjackinJavaScript_Angular_UserInterface.png)
+![Blackjack in Angular - Showcasing a player's win](/assets/gitimages/KarthikSreenivasan.BlackjackinJavaScript_Angular_UserInterface.png)
