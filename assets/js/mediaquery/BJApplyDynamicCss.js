@@ -15,6 +15,6 @@ function setCssFileBasedOnScreenSize(mediaQueryRef) {
  * The change event will fire based on the size of the screen.
  * Event will be fired if the screen size is either greater or lesser than 700px.
  */
-var mediaQueryListRef = window.matchMedia("(max-width: 700px)");
+let mediaQueryListRef = window.matchMedia("(max-width: 700px)");
 setCssFileBasedOnScreenSize(mediaQueryListRef);
 mediaQueryListRef.addEventListener("change", setCssFileBasedOnScreenSize);

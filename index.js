@@ -13,17 +13,17 @@ import BJPlay from "./assets/js/BJPlay.js";
 import BJResult from "./assets/js/BJResult.js";
 import BJNumbers from "./assets/js/constants/BJNumbers.const.js";
 
-var _bjPlay = {};
+let _bjPlay = {};
 
-var _playerCardOne = {};
-var _playerCardTwo = {};
-var _playerCardThree = {};
+let _playerCardOne = {};
+let _playerCardTwo = {};
+let _playerCardThree = {};
 
-var _dealerCardOne = {};
-var _dealerCardTwo = {};
+let _dealerCardOne = {};
+let _dealerCardTwo = {};
 
-var _playerScore = 0;
-var _dealerScore = 0;
+let _playerScore = 0;
+let _dealerScore = 0;
 
 //Button element references
 const _startButtonElement = document.querySelector("[id=btnStartGame]");
