@@ -78,11 +78,16 @@ const startGameButtonEvent = () => {
     _dealerCardCollection.push(_bjPlay.GetDealersCards[0]);
     _dealerScore = _dealerCardCollection[0].geCardPoint(0);
 
-    initializePlayerCardImageElements();
-    setCardImages(_playerCardImageIDNamePrefix, _playerCardCollection);
-
-    initializDealerCardImageElements();
-    setCardImages(_dealerCardImageIDNamePrefix, _dealerCardCollection);
+    createAndAttachImageElementsToContainer(
+      "ctnPlayerCardImages",
+      _playerCardImageIDNamePrefix,
+      _playerCardCollection
+    );
+    createAndAttachImageElementsToContainer(
+      "ctnDealerCardImages",
+      _dealerCardImageIDNamePrefix,
+      _dealerCardCollection
+    );
 
     setScores();
 
@@ -115,12 +120,7 @@ const restartGameButtonClickEvent = () => {
     _divCardResultContainerElement.style.display = "none";
     _divCardResultLabelElement.innerHTML = "";
 
-    if (document.querySelector(".cardImageControl")) {
-      document.querySelectorAll(".cardImageControl").forEach((element) => {
-        element.remove();
-      });
-    }
-
+    removeAllCardImages();
     resetButtonUI();
     resetVariables();
   });
@@ -139,11 +139,17 @@ const hitButtonClickEvent = () => {
     _dealerCardCollection.push(_bjPlay.addAdditionalCardForDealer());
     _dealerScore += _dealerCardCollection[1].geCardPoint(_dealerScore);
 
-    addPlayerCardImageElement();
-    setCardImages(_playerCardImageIDNamePrefix, _playerCardCollection);
-
-    addDeaderCardImageElement();
-    setCardImages(_dealerCardImageIDNamePrefix, _dealerCardCollection);
+    removeAllCardImages();
+    createAndAttachImageElementsToContainer(
+      "ctnPlayerCardImages",
+      _playerCardImageIDNamePrefix,
+      _playerCardCollection
+    );
+    createAndAttachImageElementsToContainer(
+      "ctnDealerCardImages",
+      _dealerCardImageIDNamePrefix,
+      _dealerCardCollection
+    );
 
     setScores();
     updateResult(_dealerScore, _playerScore);
@@ -161,8 +167,12 @@ const stayButtonClickEvent = () => {
     _dealerCardCollection.push(_bjPlay.addAdditionalCardForDealer());
     _dealerScore += _dealerCardCollection[1].geCardPoint(_dealerScore);
 
-    addDeaderCardImageElement();
-    setCardImages(_dealerCardImageIDNamePrefix, _dealerCardCollection);
+    removeImagesByParentContainerID("ctnDealerCardImages");
+    createAndAttachImageElementsToContainer(
+      "ctnDealerCardImages",
+      _dealerCardImageIDNamePrefix,
+      _dealerCardCollection
+    );
 
     setScores();
     updateResult(_dealerScore, _playerScore);
@@ -175,69 +185,75 @@ const stayButtonClickEvent = () => {
 //#region Function that handle the image elements.
 
 /**
- * Sets the playing card images dynamically based on the BJCard array data.
+ * Creates image elements and attaches them to the parent element based on the BJCard array data.
+ * @param {string} parentContainerID Parent container that holds the image elements.
  * @param {string} imagePrefix Image ID prefix value
  * @param {BJCard[]} cardCollection BJCard array reference
  */
-const setCardImages = (imagePrefix, cardCollection) => {
-  for (let i = 1, j = 0; i <= cardCollection.length; i++, j++) {
-    let cardElement = document.querySelector(`[id=${imagePrefix}${i}]`);
-    cardElement.setAttribute(
-      "src",
-      `assets/playingcardimages/${cardCollection[j].CardImageName}`
-    );
-  }
-};
-
-const addDeaderCardImageElement = () => {
-  let dealerCardContainer = document.querySelector("[id=ctnDealerCardImages]");
-  let childElementCount = dealerCardContainer.childNodes.length;
-  let dealerImageID = `${_dealerCardImageIDNamePrefix}${childElementCount + 1}`;
-  addImageElement(dealerCardContainer, createImageElement, dealerImageID);
-};
-
-const addPlayerCardImageElement = () => {
-  let playerCardContainer = document.querySelector("[id=ctnPlayerCardImages]");
-  let childElementCount = playerCardContainer.childNodes.length;
-  let playerImageID = `${_playerCardImageIDNamePrefix}${childElementCount + 1}`;
-  addImageElement(playerCardContainer, createImageElement, playerImageID);
-};
-
-const initializDealerCardImageElements = (cardCount = 1) => {
-  let dealerCardContainer = document.querySelector("[id=ctnDealerCardImages]");
-  for (let i = 1; i <= cardCount; i++) {
-    addImageElement(
-      dealerCardContainer,
-      createImageElement,
-      `${_dealerCardImageIDNamePrefix}${i}`
-    );
-  }
-};
-
-const initializePlayerCardImageElements = (cardCount = 2) => {
-  let playerCardContainer = document.querySelector("[id=ctnPlayerCardImages]");
-  for (let i = 1; i <= cardCount; i++) {
-    addImageElement(
-      playerCardContainer,
-      createImageElement,
-      `${_playerCardImageIDNamePrefix}${i}`
-    );
-  }
-};
-
-const addImageElement = (
-  parentContainer,
-  createImageElementFunction,
-  imgElementId
+const createAndAttachImageElementsToContainer = (
+  parentContainerID,
+  imagePrefix,
+  cardCollection
 ) => {
-  parentContainer.append(createImageElementFunction(imgElementId));
+  let cardContainer = document.querySelector(`[id=${parentContainerID}]`);
+  createImageElementsWithImages(imagePrefix, cardCollection).forEach(
+    (imageElement) => {
+      cardContainer.append(imageElement);
+    }
+  );
 };
 
+/**
+ * Creates image elements dynamically based on the BJCard array data.
+ * @param {string} imagePrefix Image ID prefix value
+ * @param {BJCard[]} cardCollection BJCard array reference
+ * @returns Return a tranformed image element collection for each card collection
+ */
+const createImageElementsWithImages = (imagePrefix, cardCollection) => {
+  return cardCollection.map((card) => {
+    let imageElement = createImageElement(imagePrefix);
+    imageElement.setAttribute(
+      "src",
+      `assets/playingcardimages/${card.CardImageName}`
+    );
+    return imageElement;
+  });
+};
+
+/**
+ * Creates an image element
+ * @param {string} imagePrefix Image ID prefix value
+ * @returns
+ */
 const createImageElement = (imgElementId = "") => {
   let imgCardElement = document.createElement("img");
   imgCardElement.classList.add("cardImageControl");
   imgCardElement.setAttribute("id", imgElementId);
   return imgCardElement;
+};
+
+/**
+ * Remove all the card images from the user interface.
+ */
+const removeAllCardImages = () => {
+  if (document.querySelector(".cardImageControl")) {
+    document.querySelectorAll(".cardImageControl").forEach((element) => {
+      element.remove();
+    });
+  }
+};
+
+/**
+ * Removes the images inside this parent container.
+ * @param {string} parentContainerID Parent container that holds the image elements.
+ */
+const removeImagesByParentContainerID = (parentContainerID) => {
+  let parentElement = document.querySelector(`[id=${parentContainerID}`);
+  if (parentElement) {
+    parentElement.childNodes.forEach((element) => {
+      element.remove();
+    });
+  }
 };
 
 //#endregion
