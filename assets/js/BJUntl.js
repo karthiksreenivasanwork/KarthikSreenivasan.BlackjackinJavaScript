@@ -8,7 +8,7 @@ export default class BJUtul {
    * @param {number} maxRange
    * @returns Random number
    */
-  static getRandomNumberFromInterval(minRange, maxRange) {
+  static getRandomNumberFromInterval(minRange = 1, maxRange = 52) {
     return Math.floor(Math.random() * (maxRange - minRange + 1)) + +minRange;
   }
 }

@@ -15,7 +15,7 @@ export default class BJPlay {
    *
    * @param {BJCardGenerator} cardGeneratorRef
    */
-  constructor(cardGeneratorRef) {
+  constructor(cardGeneratorRef = new BJCardGenerator()) {
     this._originalCardCollection = cardGeneratorRef.generateDeckOfCards();
     Object.assign(this._playingCardCollection, this._originalCardCollection);
     this.setPlayerCards(2);

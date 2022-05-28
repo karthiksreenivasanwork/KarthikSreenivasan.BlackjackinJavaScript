@@ -7,11 +7,11 @@ export default class BJScore {
   _totalScore = 0;
 
   /**
-   *
+   * Initialize
    * @param {number} totalScoreWithoutAce
    * @param {number} acePoints
    */
-  constructor(totalScoreWithoutAce, acePoints) {
+  constructor(totalScoreWithoutAce = 0, acePoints = 0) {
     this._totalScoreWithoutAce = totalScoreWithoutAce;
     this._acePoints = acePoints;
     this._totalScore = totalScoreWithoutAce + acePoints;

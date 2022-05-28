@@ -44,7 +44,10 @@ const _divCardContainerElement = document.querySelector(
 const _divCardResultContainerElement = document.querySelector("[id=ctnResult]");
 const _divCardResultLabelElement = document.querySelector("[id=lblResult]"); //Result label
 
-function initalizeGame() {
+const _playerCardImageIDNamePrefix = "imgPlayerCard";
+const _dealerCardImageIDNamePrefix = "imgDealerCard";
+
+const initalizeGame = () => {
   //Hide the container element that holds the cards displayed to the player while initializing the game.
   _divCardContainerElement.style.display = "none";
   //Hide the result container while initializing the game
@@ -59,13 +62,13 @@ function initalizeGame() {
 
   _hitButtonElement.className = "button enabled-button hidden-button";
   _stayButtonElement.className = "button enabled-button hidden-button";
-}
+};
 
 //#region Button events
 /**
  * Register the `Start Game` button click event.
  */
-function startGameButtonEvent() {
+const startGameButtonEvent = () => {
   _startButtonElement.addEventListener("click", () => {
     _playerCardOne = _bjPlay.GetPlayersCards[0];
     _playerCardTwo = _bjPlay.GetPlayersCards[1];
@@ -77,8 +80,8 @@ function startGameButtonEvent() {
     _dealerCardOne = _bjPlay.GetDealersCards[0];
     _dealerScore = _dealerCardOne.geCardPoint(0);
 
-    initializePlayerCardImageElements(2);
-    initializDealerCardImageElements(1);
+    initializePlayerCardImageElements();
+    initializDealerCardImageElements();
 
     setInitialCardImages();
     setScores();
@@ -101,12 +104,12 @@ function startGameButtonEvent() {
       gameoverButtonUI();
     }
   });
-}
+};
 
 /**
  * Register the `Restart Game` button click event.
  */
-function restartGameButtonClickEvent() {
+const restartGameButtonClickEvent = () => {
   _restartButtonElement.addEventListener("click", () => {
     _divCardContainerElement.style.display = "none";
     _divCardResultContainerElement.style.display = "none";
@@ -122,20 +125,22 @@ function restartGameButtonClickEvent() {
     resetButtonUI();
     resetVariables();
   });
-}
+};
 
 /**
  * Register the `Hit` button click event.
  */
-function hitButtonClickEvent() {
+const hitButtonClickEvent = () => {
   _hitButtonElement.addEventListener("click", () => {
     addDeaderCardImageElement();
     addPlayerCardImageElement();
 
     let imgPlayerCardThreeElement = document.querySelector(
-      "[id=imgPlayerCard3]"
+      `[id=${_playerCardImageIDNamePrefix}3]`
     );
-    let imgDealerCardTwoElement = document.querySelector("[id=imgDealerCard2]");
+    let imgDealerCardTwoElement = document.querySelector(
+      `[id=${_dealerCardImageIDNamePrefix}2]`
+    );
 
     _divCardResultContainerElement.style.display = "block";
 
@@ -159,15 +164,17 @@ function hitButtonClickEvent() {
 
     gameoverButtonUI();
   });
-}
+};
 
 /**
  * Register the `Stay` button click event.
  */
-function stayButtonClickEvent() {
+const stayButtonClickEvent = () => {
   _stayButtonElement.addEventListener("click", () => {
     addDeaderCardImageElement();
-    let imgDealerCardTwoElement = document.querySelector("[id=imgDealerCard2]");
+    let imgDealerCardTwoElement = document.querySelector(
+      `[id=${_dealerCardImageIDNamePrefix}2]`
+    );
 
     _divCardResultContainerElement.style.display = "block";
 
@@ -184,7 +191,7 @@ function stayButtonClickEvent() {
 
     gameoverButtonUI();
   });
-}
+};
 //#endregion
 
 //#region Function that handle the image elements.
@@ -192,10 +199,16 @@ function stayButtonClickEvent() {
 /**
  * Set the initial playing card image for both players.
  */
-function setInitialCardImages() {
-  let imgPlayerCardOneElement = document.querySelector("[id=imgPlayerCard1]");
-  let imgPlayerCardTwoElement = document.querySelector("[id=imgPlayerCard2]");
-  let imgDealerCardOneElement = document.querySelector("[id=imgDealerCard1]");
+const setInitialCardImages = () => {
+  let imgPlayerCardOneElement = document.querySelector(
+    `[id=${_playerCardImageIDNamePrefix}1]`
+  );
+  let imgPlayerCardTwoElement = document.querySelector(
+    `[id=${_playerCardImageIDNamePrefix}2]`
+  );
+  let imgDealerCardOneElement = document.querySelector(
+    `[id=${_dealerCardImageIDNamePrefix}1]`
+  );
 
   imgPlayerCardOneElement.setAttribute(
     "src",
@@ -209,48 +222,46 @@ function setInitialCardImages() {
     "src",
     `assets/playingcardimages/${_dealerCardOne.CardImageName}`
   );
-}
+};
 
-function addDeaderCardImageElement() {
+const addDeaderCardImageElement = () => {
   let dealerCardContainer = document.querySelector("[id=ctnDealerCardImages]");
   let childElementCount = dealerCardContainer.childNodes.length;
-  let dealerImageID = `imgDealerCard${childElementCount + 1}`;
+  let dealerImageID = `${_dealerCardImageIDNamePrefix}${childElementCount + 1}`;
   addImageElement(dealerCardContainer, dealerImageID);
-}
+};
 
-function addPlayerCardImageElement() {
+const addPlayerCardImageElement = () => {
   let playerCardContainer = document.querySelector("[id=ctnPlayerCardImages]");
   let childElementCount = playerCardContainer.childNodes.length;
-  let playerImageID = `imgPlayerCard${childElementCount + 1}`;
+  let playerImageID = `${_playerCardImageIDNamePrefix}${childElementCount + 1}`;
   addImageElement(playerCardContainer, playerImageID);
-}
+};
 
-function initializDealerCardImageElements(cardCount) {
+const initializDealerCardImageElements = (cardCount = 1) => {
   let dealerCardContainer = document.querySelector("[id=ctnDealerCardImages]");
-  let dealerImageID = "imgDealerCard";
   for (let i = 1; i <= cardCount; i++) {
-    addImageElement(dealerCardContainer, `${dealerImageID}${i}`);
+    addImageElement(dealerCardContainer, `${_dealerCardImageIDNamePrefix}${i}`);
   }
-}
+};
 
-function initializePlayerCardImageElements(cardCount) {
+const initializePlayerCardImageElements = (cardCount = 2) => {
   let playerCardContainer = document.querySelector("[id=ctnPlayerCardImages]");
-  let playerImageID = "imgPlayerCard";
   for (let i = 1; i <= cardCount; i++) {
-    addImageElement(playerCardContainer, `${playerImageID}${i}`);
+    addImageElement(playerCardContainer, `${_playerCardImageIDNamePrefix}${i}`);
   }
-}
+};
 
-function addImageElement(parentContainer, imgElementId) {
+const addImageElement = (parentContainer, imgElementId) => {
   parentContainer.append(createImageElement(imgElementId));
-}
+};
 
-function createImageElement(imgElementId) {
+const createImageElement = (imgElementId = "") => {
   let imgCardElement = document.createElement("img");
   imgCardElement.classList.add("cardImageControl");
   imgCardElement.setAttribute("id", imgElementId);
   return imgCardElement;
-}
+};
 
 //#endregion
 
@@ -259,15 +270,15 @@ function createImageElement(imgElementId) {
 /**
  * Set the total score for both player and the dealer.
  */
-function setScores() {
+const setScores = () => {
   _spanPlayerScoreElement.innerHTML = `Score is: ${_playerScore.toString()}`;
   _spanDealerScoreElement.innerHTML = `Score is: ${_dealerScore.toString()}`;
-}
+};
 
 /**
  * Reset all the global variables in this script file.
  */
-function resetVariables() {
+const resetVariables = () => {
   _bjPlay = new BJPlay(new BJCardGenerator());
 
   _playerCardOne = {};
@@ -278,34 +289,34 @@ function resetVariables() {
 
   _playerScore = 0;
   _dealerScore = 0;
-}
+};
 
 /**
  * Defines the button CSS class when the game has been restarted.
  */
-function resetButtonUI() {
+const resetButtonUI = () => {
   _startButtonElement.className = "button enabled-button";
   //The restart button is disabled until another game is in progress or completed.
   _restartButtonElement.className = "button disabled-button";
   _hitButtonElement.className = "button enabled-button hidden-button";
   _stayButtonElement.className = "button enabled-button hidden-button";
-}
+};
 
 /**
  * Defines the button CSS class when the game is over.
  */
-function gameoverButtonUI() {
+const gameoverButtonUI = () => {
   _startButtonElement.classList.replace("revealed-button", "disabled-button");
   _hitButtonElement.classList.replace("revealed-button", "disabled-button");
   _stayButtonElement.classList.replace("revealed-button", "disabled-button");
-}
+};
 
 /**
  * This function ditermines the winner of the game
  * @param {number} dealerScore Dealer's total score
  * @param {number} playerScore Player's total score
  */
-function updateResult(dealerScore, playerScore) {
+const updateResult = (dealerScore = 0, playerScore = 0) => {
   let resultRef = new BJResult(dealerScore, playerScore);
   let resultString = "";
 
@@ -318,7 +329,7 @@ function updateResult(dealerScore, playerScore) {
   } else resultString = "It is a Draw!";
 
   _divCardResultLabelElement.innerHTML = resultString;
-}
+};
 
 //#endregion
 window.onload = initalizeGame;

@@ -55,11 +55,10 @@ export default class BJCard {
 
   /**
    * Dynamically calculates Ace score based on current score.
-   * @param {BJCard} cardRef Card reference
    * @param {number} currentScore Current score of the dealer or player
    * @returns Calculated Ace score if found and card score otherwise.
    */
-  geCardPoint(currentScore) {
+  geCardPoint(currentScore = 0) {
     /**
      * Ace is worth 1 or 11, whichever makes a better hand.
      * Hence, if the current score with Ace point of 11 is a winning score

@@ -20,7 +20,7 @@ export default class BJResult {
    * @param {number} dealersTotalScore Total score earned by the dealer
    * @param {number} playersTotalScore Total score earned by the player.
    */
-  constructor(dealersTotalScore, playersTotalScore) {
+  constructor(dealersTotalScore = 0, playersTotalScore = 0) {
     if (playersTotalScore == BJNumbers.WinningScore) {
       this._playerWin = true;
     } else {
