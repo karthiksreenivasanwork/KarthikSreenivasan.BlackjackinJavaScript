@@ -21,16 +21,31 @@ export default class BJResult {
    * @param {number} playersTotalScore Total score earned by the player.
    */
   constructor(dealersTotalScore = 0, playersTotalScore = 0) {
-    if (playersTotalScore == BJNumbers.WinningScore) {
-      this._playerWin = true;
-    } else {
-      if (playersTotalScore > BJNumbers.WinningScore) this._dealerWin = true;
-      else if (dealersTotalScore > BJNumbers.WinningScore)
+    switch (true) {
+      case playersTotalScore === BJNumbers.WinningScore:
         this._playerWin = true;
-      else if (dealersTotalScore == playersTotalScore) this._isDraw = true;
-      else if (dealersTotalScore > playersTotalScore) this._dealerWin = true;
-      else if (playersTotalScore > dealersTotalScore) this._playerWin = true;
+        break;
+      case playersTotalScore > BJNumbers.WinningScore:
+        this._dealerWin = true;
+        break;
+      case dealersTotalScore > BJNumbers.WinningScore:
+        this._playerWin = true;
+        break;
+      case dealersTotalScore === playersTotalScore:
+        this._isDraw = true;
+        break;
+      case dealersTotalScore > playersTotalScore:
+        this._dealerWin = true;
+        break;
+      case playersTotalScore > dealersTotalScore:
+        this._playerWin = true;
+        break;
+      default:
+        console.log(
+          "Something went wrong! Unable to ditermine the outcome of the game."
+        );
     }
+
     if (!this._isDraw && (this._playerWin || this._dealerWin)) {
       this._winnerDeclared = true;
     }

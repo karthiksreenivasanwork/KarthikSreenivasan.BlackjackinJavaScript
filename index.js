@@ -15,12 +15,8 @@ import BJNumbers from "./assets/js/constants/BJNumbers.const.js";
 
 let _bjPlay = {};
 
-let _playerCardOne = {};
-let _playerCardTwo = {};
-let _playerCardThree = {};
-
-let _dealerCardOne = {};
-let _dealerCardTwo = {};
+let _playerCardCollection = [];
+let _dealerCardCollection = [];
 
 let _playerScore = 0;
 let _dealerScore = 0;
@@ -70,20 +66,24 @@ const initalizeGame = () => {
  */
 const startGameButtonEvent = () => {
   _startButtonElement.addEventListener("click", () => {
-    _playerCardOne = _bjPlay.GetPlayersCards[0];
-    _playerCardTwo = _bjPlay.GetPlayersCards[1];
+    for (let i = 0; i < _bjPlay.GetPlayersCards.length; i++)
+      _playerCardCollection.push(_bjPlay.GetPlayersCards[i]);
 
     _playerScore =
-      _playerCardOne.geCardPoint(0) +
-      _playerCardTwo.geCardPoint(Number(_playerCardOne.CardPoints));
+      _playerCardCollection[0].geCardPoint(0) +
+      _playerCardCollection[1].geCardPoint(
+        Number(_playerCardCollection[0].CardPoints)
+      );
 
-    _dealerCardOne = _bjPlay.GetDealersCards[0];
-    _dealerScore = _dealerCardOne.geCardPoint(0);
+    _dealerCardCollection.push(_bjPlay.GetDealersCards[0]);
+    _dealerScore = _dealerCardCollection[0].geCardPoint(0);
 
     initializePlayerCardImageElements();
-    initializDealerCardImageElements();
+    setCardImages(_playerCardImageIDNamePrefix, _playerCardCollection);
 
-    setInitialCardImages();
+    initializDealerCardImageElements();
+    setCardImages(_dealerCardImageIDNamePrefix, _dealerCardCollection);
+
     setScores();
 
     //Reveal the card container once the card binding has been completed.
@@ -113,14 +113,13 @@ const restartGameButtonClickEvent = () => {
   _restartButtonElement.addEventListener("click", () => {
     _divCardContainerElement.style.display = "none";
     _divCardResultContainerElement.style.display = "none";
+    _divCardResultLabelElement.innerHTML = "";
 
     if (document.querySelector(".cardImageControl")) {
       document.querySelectorAll(".cardImageControl").forEach((element) => {
         element.remove();
       });
     }
-
-    _divCardResultLabelElement.innerHTML = "";
 
     resetButtonUI();
     resetVariables();
@@ -132,36 +131,22 @@ const restartGameButtonClickEvent = () => {
  */
 const hitButtonClickEvent = () => {
   _hitButtonElement.addEventListener("click", () => {
-    addDeaderCardImageElement();
-    addPlayerCardImageElement();
-
-    let imgPlayerCardThreeElement = document.querySelector(
-      `[id=${_playerCardImageIDNamePrefix}3]`
-    );
-    let imgDealerCardTwoElement = document.querySelector(
-      `[id=${_dealerCardImageIDNamePrefix}2]`
-    );
-
     _divCardResultContainerElement.style.display = "block";
 
-    _playerCardThree = _bjPlay.addAdditionalCardForPlayer();
-    _playerScore += _playerCardThree.geCardPoint(_playerScore);
+    _playerCardCollection.push(_bjPlay.addAdditionalCardForPlayer());
+    _playerScore += _playerCardCollection[2].geCardPoint(_playerScore);
 
-    _dealerCardTwo = _bjPlay.addAdditionalCardForDealer();
-    _dealerScore += _dealerCardTwo.geCardPoint(_dealerScore);
+    _dealerCardCollection.push(_bjPlay.addAdditionalCardForDealer());
+    _dealerScore += _dealerCardCollection[1].geCardPoint(_dealerScore);
+
+    addPlayerCardImageElement();
+    setCardImages(_playerCardImageIDNamePrefix, _playerCardCollection);
+
+    addDeaderCardImageElement();
+    setCardImages(_dealerCardImageIDNamePrefix, _dealerCardCollection);
 
     setScores();
     updateResult(_dealerScore, _playerScore);
-
-    imgPlayerCardThreeElement.setAttribute(
-      "src",
-      `assets/playingcardimages/${_playerCardThree.CardImageName}`
-    );
-    imgDealerCardTwoElement.setAttribute(
-      "src",
-      `assets/playingcardimages/${_dealerCardTwo.CardImageName}`
-    );
-
     gameoverButtonUI();
   });
 };
@@ -171,23 +156,16 @@ const hitButtonClickEvent = () => {
  */
 const stayButtonClickEvent = () => {
   _stayButtonElement.addEventListener("click", () => {
-    addDeaderCardImageElement();
-    let imgDealerCardTwoElement = document.querySelector(
-      `[id=${_dealerCardImageIDNamePrefix}2]`
-    );
-
     _divCardResultContainerElement.style.display = "block";
 
-    _dealerCardTwo = _bjPlay.addAdditionalCardForDealer();
-    _dealerScore += _dealerCardTwo.geCardPoint(_dealerScore);
+    _dealerCardCollection.push(_bjPlay.addAdditionalCardForDealer());
+    _dealerScore += _dealerCardCollection[1].geCardPoint(_dealerScore);
+
+    addDeaderCardImageElement();
+    setCardImages(_dealerCardImageIDNamePrefix, _dealerCardCollection);
 
     setScores();
     updateResult(_dealerScore, _playerScore);
-
-    imgDealerCardTwoElement.setAttribute(
-      "src",
-      `assets/playingcardimages/${_dealerCardTwo.CardImageName}`
-    );
 
     gameoverButtonUI();
   });
@@ -197,63 +175,62 @@ const stayButtonClickEvent = () => {
 //#region Function that handle the image elements.
 
 /**
- * Set the initial playing card image for both players.
+ * Sets the playing card images dynamically based on the BJCard array data.
+ * @param {string} imagePrefix Image ID prefix value
+ * @param {BJCard[]} cardCollection BJCard array reference
  */
-const setInitialCardImages = () => {
-  let imgPlayerCardOneElement = document.querySelector(
-    `[id=${_playerCardImageIDNamePrefix}1]`
-  );
-  let imgPlayerCardTwoElement = document.querySelector(
-    `[id=${_playerCardImageIDNamePrefix}2]`
-  );
-  let imgDealerCardOneElement = document.querySelector(
-    `[id=${_dealerCardImageIDNamePrefix}1]`
-  );
-
-  imgPlayerCardOneElement.setAttribute(
-    "src",
-    `assets/playingcardimages/${_playerCardOne.CardImageName}`
-  );
-  imgPlayerCardTwoElement.setAttribute(
-    "src",
-    `assets/playingcardimages/${_playerCardTwo.CardImageName}`
-  );
-  imgDealerCardOneElement.setAttribute(
-    "src",
-    `assets/playingcardimages/${_dealerCardOne.CardImageName}`
-  );
+const setCardImages = (imagePrefix, cardCollection) => {
+  for (let i = 1, j = 0; i <= cardCollection.length; i++, j++) {
+    let cardElement = document.querySelector(`[id=${imagePrefix}${i}]`);
+    cardElement.setAttribute(
+      "src",
+      `assets/playingcardimages/${cardCollection[j].CardImageName}`
+    );
+  }
 };
 
 const addDeaderCardImageElement = () => {
   let dealerCardContainer = document.querySelector("[id=ctnDealerCardImages]");
   let childElementCount = dealerCardContainer.childNodes.length;
   let dealerImageID = `${_dealerCardImageIDNamePrefix}${childElementCount + 1}`;
-  addImageElement(dealerCardContainer, dealerImageID);
+  addImageElement(dealerCardContainer, createImageElement, dealerImageID);
 };
 
 const addPlayerCardImageElement = () => {
   let playerCardContainer = document.querySelector("[id=ctnPlayerCardImages]");
   let childElementCount = playerCardContainer.childNodes.length;
   let playerImageID = `${_playerCardImageIDNamePrefix}${childElementCount + 1}`;
-  addImageElement(playerCardContainer, playerImageID);
+  addImageElement(playerCardContainer, createImageElement, playerImageID);
 };
 
 const initializDealerCardImageElements = (cardCount = 1) => {
   let dealerCardContainer = document.querySelector("[id=ctnDealerCardImages]");
   for (let i = 1; i <= cardCount; i++) {
-    addImageElement(dealerCardContainer, `${_dealerCardImageIDNamePrefix}${i}`);
+    addImageElement(
+      dealerCardContainer,
+      createImageElement,
+      `${_dealerCardImageIDNamePrefix}${i}`
+    );
   }
 };
 
 const initializePlayerCardImageElements = (cardCount = 2) => {
   let playerCardContainer = document.querySelector("[id=ctnPlayerCardImages]");
   for (let i = 1; i <= cardCount; i++) {
-    addImageElement(playerCardContainer, `${_playerCardImageIDNamePrefix}${i}`);
+    addImageElement(
+      playerCardContainer,
+      createImageElement,
+      `${_playerCardImageIDNamePrefix}${i}`
+    );
   }
 };
 
-const addImageElement = (parentContainer, imgElementId) => {
-  parentContainer.append(createImageElement(imgElementId));
+const addImageElement = (
+  parentContainer,
+  createImageElementFunction,
+  imgElementId
+) => {
+  parentContainer.append(createImageElementFunction(imgElementId));
 };
 
 const createImageElement = (imgElementId = "") => {
@@ -281,11 +258,8 @@ const setScores = () => {
 const resetVariables = () => {
   _bjPlay = new BJPlay(new BJCardGenerator());
 
-  _playerCardOne = {};
-  _playerCardTwo = {};
-
-  _dealerCardOne = {};
-  _dealerCardTwo = {};
+  _playerCardCollection = [];
+  _dealerCardCollection = [];
 
   _playerScore = 0;
   _dealerScore = 0;

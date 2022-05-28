@@ -42,10 +42,11 @@ export default class BJCardGenerator {
         );
       }
       this._bjCardCollection.push(
-        new BJCard(BJStrings.Ace, Object.keys(BJFamily)[cardFamilyIndex], [
-          BJCardValue.Ace.AceOne,
-          BJCardValue.Ace.AceEleven,
-        ])
+        new BJCard(
+          BJStrings.Ace,
+          Object.keys(BJFamily)[cardFamilyIndex],
+          this.aceValueCollection()
+        )
       );
       this._bjCardCollection.push(
         new BJCard(
@@ -73,31 +74,13 @@ export default class BJCardGenerator {
   }
 
   /**
-   * Generate a collection if required and return the playing cards with it's points as a string array.
-   * @returns Collection of cards along with it's points as string array.
+   * Creates an array of values associated with the Ace card.
+   * @returns Numeric value array
    */
-  viewCardCollectionwithPoints() {
-    if (this._bjViewCardCollection.length > 0)
-      return this._bjViewCardCollection;
-
-    if (this._bjCardCollection.length > 0) {
-      this._bjCardCollection.forEach((bjCard) => {
-        if (bjCard.CardPoints.length > 0) {
-          bjCard.CardPoints.forEach((value) => {
-            this._bjViewCardCollection.push(
-              `${bjCard.FullCardName} with the points of ${value}.`
-            );
-          });
-        } else
-          this._bjViewCardCollection.push(
-            `${bjCard.FullCardName} with the point of ${bjCard.CardPoints}.`
-          );
-      });
-    } else {
-      this.generateDeckOfCards();
-      this.viewCardCollectionwithPoints();
-    }
-
-    return this._bjViewCardCollection;
+  aceValueCollection() {
+    let aceValueCollection = [];
+    for (const aceValueKey in BJCardValue.Ace)
+      aceValueCollection.push(BJCardValue.Ace[aceValueKey]);
+    return aceValueCollection;
   }
 }
