@@ -6,7 +6,11 @@ This is a game called Blackjack developed using JavaScript, HTML and CSS only.
 
 Please visit my LinkedIn profile page [here.](https://www.linkedin.com/in/karthiksreenivasan/)
 
-## User Interface
+## User Interface | Desktop
+
+- User interface changes based on screen size dynamically.
+  - By default, the CSS file configured for desktop is applied.
+  - However, if the player's screen width is less than 700 pixels, the CSS file configured for mobile is applied.
 
 ![Blackjack in Javascript - Showcasing a player's win](/assets/gitimages/KarthikSreenivasan.BlackjackinJavaScript_UserInterface.png)
 
